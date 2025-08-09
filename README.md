@@ -1,83 +1,83 @@
-# Popeyes IS — Tkinter Click & Collect + Prize Wheel (FR)
+# Popeyes IS — Tkinter Click & Collect + Prize Wheel
 
-Projet universitaire (Sorbonne, S2 S2IE) : mini-application **Tkinter** simulant un parcours client "Click & Collect" et une roue des récompenses pour un fast-food.  
-L’application permet de sélectionner un restaurant pour récupérer une commande, de lancer une roue animée et d’attribuer un lot avec des probabilités configurables.
-
----
-
-## Objectifs pédagogiques
-
-- Modéliser un parcours utilisateur simple (Accueil → Click & Collect → Roue).
-- Illustrer une gamification basique (récompenses probabilisées).
-- Manipuler Tkinter (frames, navigation, images, événements) et Pillow (rotation/redimensionnement d’image).
+Academic project (Sorbonne, S2 S2IE): a small **Tkinter** application that simulates a fast‑food **Click & Collect** flow and an animated **Prize Wheel**.  
+Users select a pickup restaurant, spin a wheel, and receive a reward based on configurable probabilities.
 
 ---
 
-## Fonctionnalités
+## Learning Objectives
 
-- Accueil : navigation vers Click & Collect ou la Roue.
-- Click & Collect : liste de restaurants et message de retrait.
-- Roue des récompenses :
-  - Animation fluide (rotation via `after`).
-  - Arrêt manuel et tirage probabiliste.
-  - Affichage du gain (Raté, Points de fidélité, Burger, Menu).
-- Interface en français.
+- Model a simple user journey (Home → Click & Collect → Prize Wheel).
+- Demonstrate basic **gamification** with probability‑based rewards.
+- Practice **Tkinter** (frames, navigation, images, events) and **Pillow** (image rotation/resizing).
 
 ---
 
-## Stack et dépendances
+## Features
 
-- Python ≥ 3.9
-- tkinter (inclus avec CPython)
-- Pillow pour la manipulation d’images
+- **Home**: navigate to Click & Collect or the Prize Wheel.
+- **Click & Collect**: choose a restaurant; show pickup message.
+- **Prize Wheel**:
+  - Smooth animation using `after` and image rotation.
+  - Manual stop and probability‑based draw.
+  - Result display: Miss, Loyalty Points, Burger, Menu.
+- French labels in the original notebook (code comments and strings can be localized).
 
-Installation rapide :
+---
+
+## Tech Stack and Dependencies
+
+- **Python** ≥ 3.9
+- **tkinter** (bundled with CPython)
+- **Pillow** for image handling
+
+Installation:
 
 ```bash
-# (optionnel) environnement virtuel
+# (optional) virtual environment
 python -m venv .venv
 
 # Windows
-.venv\Scriptsctivate
+.venv\Scripts\activate
 # macOS/Linux
 source .venv/bin/activate
 
 pip install pillow
 ```
 
-Note de compatibilité : `Image.ANTIALIAS` est déprécié à partir de Pillow ≥ 10. Utiliser `Image.Resampling.LANCZOS`.
+Compatibility note: `Image.ANTIALIAS` is deprecated in Pillow ≥ 10. Use `Image.Resampling.LANCZOS` instead.
 
 ---
 
-## Organisation des fichiers
+## Project Structure
 
 ```
 Projet_Popeyes/
 ├─ README.md
 ├─ Information System Wheel 3 FR.ipynb
-├─ app.py                      # (optionnel) version script autonome
+├─ app.py                      # (optional) standalone script version
 ├─ assets/
-│  └─ roue.png                 # image de la roue
+│  └─ roue.png                 # wheel image
 └─ requirements.txt            # pillow
 ```
 
-Si l’image est manquante, créer `assets/roue.png` ou adapter le chemin de l’image dans le code.
+If the image is missing, add `assets/roue.png` or update the image path in code.
 
 ---
 
-## Lancement
+## Run
 
 ### Option A — Jupyter Notebook
-Ouvrir `Information System Wheel 3 FR.ipynb` et exécuter les cellules.
+Open `Information System Wheel 3 FR.ipynb` and run all cells.
 
-### Option B — Script Python
-Copier le code dans `app.py` et utiliser un chemin **relatif** pour l’image :
+### Option B — Python Script
+Copy the notebook logic into `app.py` and use a **relative** image path:
 
 ```python
-image_path = "assets/roue.png"  # adapter si nécessaire
+image_path = "assets/roue.png"  # adjust if needed
 ```
 
-Exécuter :
+Run:
 
 ```bash
 python app.py
@@ -85,88 +85,68 @@ python app.py
 
 ---
 
-## Configuration de l’image
+## Image Configuration
 
-- Format recommandé : PNG, carré (ex. 800×800).
-- L’image est pivotée et redimensionnée (~300 px).
-- Les images trop grandes sont automatiquement réduites via `thumbnail`.
+- Recommended format: PNG, square (e.g., 800×800).
+- The image is rotated and resized (~300 px).
+- Large images are automatically downscaled with `thumbnail`.
 
-Exemple de remplacement de l’API dépréciée :
+Replacing the deprecated API:
 
 ```python
 from PIL import Image
 
-# Ancien (déprécié) :
+# Old (deprecated):
 # image.thumbnail((300, 300), Image.ANTIALIAS)
 
-# Nouveau (Pillow ≥ 10) :
+# New (Pillow ≥ 10):
 image.thumbnail((300, 300), Image.Resampling.LANCZOS)
 ```
 
 ---
 
-## Paramétrage des récompenses
+## Prize Configuration
 
-Le tirage utilise un entier aléatoire [1–100] et mappe sur une plage :
+The wheel draws a random integer in [1–100] and maps it to a prize:
 
 ```python
 prizes = [
-    ("Raté", 0, 30),
-    ("10 Points de fidélité", 31, 65),
+    ("Miss", 0, 30),
+    ("10 Loyalty Points", 31, 65),
     ("Burger", 66, 90),
     ("Menu", 91, 100)
 ]
 ```
 
-Pour ajuster les probabilités, modifier les bornes tout en couvrant 1–100 sans chevauchement.
+To rebalance probabilities, adjust the ranges so they cover 1–100 without gaps or overlaps.
 
 ---
 
-## Navigation et événements (résumé)
+## Navigation and Event Flow
 
-- `show_home()` / `show_click_and_collect()` / `show_prize_wheel()` : gestion des écrans.
-- `pick_up_order()` : affiche le restaurant sélectionné.
-- `pick_prize()` → `update_image()` : démarre/maintient la rotation.
-- `stop_spin()` : stoppe l’animation et déclenche `show_prize()`.
+- `show_home()` / `show_click_and_collect()` / `show_prize_wheel()` manage screens.
+- `pick_up_order()` displays the selected restaurant.
+- `pick_prize()` → `update_image()` starts/maintains rotation.
+- `stop_spin()` stops animation and triggers `show_prize()`.
 
-Flux :
+Flow:
 
 ```
-[Accueil]
-   ├── Click & Collect  → Sélection → Message de retrait
-   └── Roue             → Rotation → Stop → Tirage → Résultat
+[Home]
+   ├── Click & Collect  → Selection → Pickup message
+   └── Prize Wheel      → Rotation → Stop → Draw → Result
 ```
 
 ---
 
-## Améliorations possibles
+## Known Issues
 
-- Externaliser la configuration (JSON/YAML) : probabilités, restaurants, libellés.
-- Utiliser des chemins relatifs et embarquer les assets dans le repo.
-- Amélioration UI (mise en page `grid`, styles, icônes).
-- Effet d’inertie (décélération progressive) avant l’arrêt de la roue.
-- Tests unitaires du tirage avec graines pseudo-aléatoires.
-- Internationalisation (FR/EN).
+- Some examples hard‑code an absolute image path; prefer a relative path (e.g., `assets/roue.png`).
+- `Image.ANTIALIAS` is obsolete with Pillow ≥ 10; use `Image.Resampling.LANCZOS`.
+- The animation uses `after`; avoid blocking operations on the UI thread.
 
 ---
 
-## Points connus
+## English‑Only Note
 
-- Chemin d’image parfois codé en dur dans des exemples antérieurs.
-- `Image.ANTIALIAS` obsolète avec Pillow ≥ 10.
-- L’animation utilise `after` : éviter les opérations bloquantes dans le thread UI.
-
----
-
-## Licence
-
-Projet académique. Utilisation libre à des fins éducatives et démonstratives.  
-(Ajouter une licence explicite si nécessaire, ex. MIT.)
-
----
-
-## English Summary
-
-Small Tkinter demo app for a fast-food Click & Collect flow and an animated Prize Wheel.  
-Features: screen navigation, list selection, image rotation with Pillow, and probabilistic reward assignment.  
-Run via notebook or `python app.py`; ensure `assets/roue.png` exists and install `pillow`. Replace `ANTIALIAS` with `Image.Resampling.LANCZOS` for Pillow ≥ 10.
+This repository’s README is intentionally in English. Future READMEs will be provided in English as requested.
